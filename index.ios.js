@@ -9,23 +9,37 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Animated,
 } from 'react-native';
 
 export default class AnimationExample extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      bounceValue: new Animated.value(0);
+    };
+  }
+
+  componentDidMount() {
+    this.state.bounceValue.setValue(1.5);
+    Animated
+      .spring(
+        this.state.bounceValue,
+        {
+          toValue: 0.8,
+          friction: 1,
+        }
+      )
+      .start();
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <Animated.View style={styles.topHalf} />
+        <View style={styles.bottomHalf} />
       </View>
     );
   }
@@ -34,19 +48,20 @@ export default class AnimationExample extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    flexDirection: 'column',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  topHalf: {
+    flex: 1,
+    backgroundColor: '#DC143C',
+    transform: [
+      {
+        scale: this.state.bounceValue,
+      },
+    ],
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  bottomHalf: {
+    flex: 1,
+    backgroundColor: '#1E90FF',
   },
 });
 
