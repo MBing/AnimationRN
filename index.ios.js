@@ -18,12 +18,14 @@ export default class AnimationExample extends Component {
     super();
 
     this.state = {
-      bounceValue: new Animated.value(0);
+      bounceValue: new Animated.Value(0),
+      fadeAnim: new Animated.Value(0),
     };
   }
 
   componentDidMount() {
     this.state.bounceValue.setValue(1.5);
+
     Animated
       .spring(
         this.state.bounceValue,
@@ -33,13 +35,23 @@ export default class AnimationExample extends Component {
         }
       )
       .start();
+
+    Animated
+      .timing(
+        this.state.fadeAnim,
+        {
+          toValue: 1,
+          duration: 2000,
+        },
+      )
+      .start();
   }
 
   render() {
     return (
       <View style={styles.container}>
         <Animated.View style={styles.topHalf} />
-        <View style={styles.bottomHalf} />
+        <Animated.View style={styles.bottomHalf} />
       </View>
     );
   }
@@ -62,6 +74,7 @@ const styles = StyleSheet.create({
   bottomHalf: {
     flex: 1,
     backgroundColor: '#1E90FF',
+    opacity: this.state.fadeAnim,
   },
 });
 
